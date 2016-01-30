@@ -303,7 +303,7 @@
                                     <constraint firstAttribute="width" constant="40" id="Jcz-0k-X2Q"/>
                                     <constraint firstAttribute="height" constant="30" id="wR5-Tp-TPC"/>
                                 </constraints>
-                                <state key="normal" title="GO"/>
+                                <state key="normal" title="Add"/>
                             </button>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RxO-UP-rqC">
                                 <rect key="frame" x="20" y="170" width="560" height="365"/>

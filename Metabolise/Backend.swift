@@ -6,33 +6,36 @@
 //  Copyright © 2016 Miraan. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class Backend {
+    static var baseUrl = "http://localhost:5000/"
+    
+    class func query(text: String, completionHandler: (success: Bool, calories: Int?, units: String?, queryError: NSError?) -> Void) {
+        call("", params: ["dish": text]) { (success: Bool, jsonResponse: JSON?, backendError: NSError?) in
+            if !success {
+                completionHandler(success: false, calories: nil, units: nil, queryError: backendError)
+            } else {
+                let calories = jsonResponse!["calories"].int
+                let units = jsonResponse!["units"].string
+                completionHandler(success: true, calories: calories, units: units, queryError: nil)
+            }
+        }
+    }
+    
     class func call(method: String!, params: [String:String]?, completionHandler: (success: Bool, jsonResponse: JSON?, backendError: NSError?) -> Void) {
         call(method, params: params, attempt: 1, HTTPMethod: "GET", contentType: nil, HTTPBody: nil, completionHandler: completionHandler)
     }
     
     class func call(method: String!, var params: [String:String]?, attempt: Int, HTTPMethod: String, contentType: String?, HTTPBody: NSData?, completionHandler: (success: Bool, jsonResponse: JSON?, backendError: NSError?) -> Void) {
-        var url = baseUrl.rawValue + method
+        var url = baseUrl + method
         
         if params == nil {
             params = [String:String]()
         }
         
-        if let infoDictionary = NSBundle.mainBundle().infoDictionary {
-            params!["appVersion"] = (infoDictionary ["CFBundleShortVersionString"] as! String)
-            params!["appBuild"] = (infoDictionary ["CFBundleVersion"] as! String)
-        }
-        
         params!["deviceType"] = "ios";
         params!["deviceId"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
-        if let deviceToken = Device.get()?.deviceToken {
-            params!["deviceToken"] = deviceToken
-            #if DEBUG
-                params!["development"] = "1"
-            #endif
-        }
         
         if params != nil {
             url += "?"
@@ -55,12 +58,6 @@ class Backend {
             request.HTTPBody = HTTPBody
         }
         
-        let authheader = getAuthorisationHeaderValue()
-        print(User.get()?.token, terminator: "")
-        let token = User.get()?.token
-        request.setValue(getAuthorisationHeaderValue(), forHTTPHeaderField: "Authorisation")
-        request.setValue(User.get()?.token, forHTTPHeaderField: "Token")
-        
         switch attempt {
         case 2:
             request.timeoutInterval *= 2
@@ -80,15 +77,9 @@ class Backend {
                                 self.call(method, params: params, attempt: attempt + 1, HTTPMethod: HTTPMethod, contentType: contentType, HTTPBody: HTTPBody, completionHandler: completionHandler)
                             })
                             return
-                        } else if AppDelegate.connectedToInternet {
-                            AppDelegate.connectedToInternet = false
-                            AppDelegate.refreshConnectionStatus(true)
                         }
                     }
                 }
-            } else if !AppDelegate.connectedToInternet {
-                AppDelegate.connectedToInternet = true
-                AppDelegate.refreshConnectionStatus(true)
             }
             if data != nil {
                 //var stringResponse = NSString(data: data!, encoding: NSUTF8StringEncoding)
