@@ -26,6 +26,14 @@ class EnergyLevelView: UIView {
         setup()
     }
     
+    func UIColorFromRGB(rgbValue: UInt) -> UIColor {
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
     
     var calories: Int! { // default value
         didSet {
@@ -38,8 +46,6 @@ class EnergyLevelView: UIView {
     let maximumCalorieOffset: Int! = 1500
     var levelView: UIView!
     var labelView: UILabel!
-    let positiveColor = UIColor.redColor()
-    let negativeColor = UIColor.blueColor()
     let labelViewFont = UIFont(name: "Helvetica-Neue", size: 18.0)
     let labelViewTextColor = UIColor.whiteColor()
     
@@ -59,12 +65,22 @@ class EnergyLevelView: UIView {
         addSubview(labelView)
     }
     
+    func getPositiveColor(coef: CGFloat) -> UIColor {
+        return UIColor(red: (141+100*coef)/255, green: 196/255, blue: 15/255, alpha: 1)
+    }
+    
+    func getNegativeColor(coef: CGFloat) -> UIColor {
+        return UIColor(red: 22/255, green: (60 + 100 * coef)/255, blue: 133/255, alpha: 1)
+    }
+    
     func update() {
         levelView.frame = getLevelViewFrame()
-        levelView.backgroundColor = (isPositive() ? positiveColor : negativeColor)
+        
+        let coef = levelView.frame.height / originalHeight
+        levelView.backgroundColor = (isPositive() ? getPositiveColor(coef) : getNegativeColor(coef))
         
         labelView.frame = getLabelFrame()
-        labelView.text = (isPositive() ? "+" : "") + "\(calories)"
+        labelView.text = (isPositive() ? "+" : "") + "\(calories)" + "cal"
         labelView.font = labelViewFont
         labelView.textColor = labelViewTextColor
         labelView.textAlignment = NSTextAlignment.Center
