@@ -1,2 +1,2 @@
 # metabolise-ios
-Metabolise iOS
+Metabolise iOS allows you to easily track your daily calories by displaying your net energy expenditure throughout the day. Voice recognition makes it easy to track meals, and the backend uses a machine learning based approach to accurately computing the calories of any description of your meal. The innovative UI gives you a sense of how your energy intake and outtake is distributed across the day.
