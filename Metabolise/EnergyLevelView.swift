@@ -60,14 +60,16 @@ class EnergyLevelView: UIView {
     }
     
     func update() {
-        levelView.frame = getLevelViewFrame()
-        levelView.backgroundColor = (isPositive() ? positiveColor : negativeColor)
-        
-        labelView.frame = getLabelFrame()
-        labelView.text = (isPositive() ? "+" : "") + "\(calories)"
-        labelView.font = labelViewFont
-        labelView.textColor = labelViewTextColor
-        labelView.textAlignment = NSTextAlignment.Center
+        UIView.animateWithDuration(1.0) {
+            self.levelView.frame = self.getLevelViewFrame()
+            self.levelView.backgroundColor = (self.isPositive() ? self.positiveColor : self.negativeColor)
+            
+            self.labelView.frame = self.getLabelFrame()
+            self.labelView.text = (self.isPositive() ? "+" : "") + "\(self.calories)"
+            self.labelView.font = self.labelViewFont
+            self.labelView.textColor = self.labelViewTextColor
+            self.labelView.textAlignment = NSTextAlignment.Center
+        }
     }
     
     func getLevelViewFrame() -> CGRect {

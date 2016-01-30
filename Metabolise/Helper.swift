@@ -103,7 +103,7 @@ class Helper {
         let state = State.get()!
         var total = 0
         for meal in state.meals {
-            total += meal.calories
+            total += meal.calories * meal.quantity
         }
         return total
     }

@@ -81,10 +81,10 @@ class Backend {
                     }
                 }
             }
-            if data != nil {
-                //var stringResponse = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                //print("Backend call string response: \(stringResponse)")
-            }
+//            if data != nil {
+//                var stringResponse = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//                print("Backend call string response: \(stringResponse)")
+//            }
             
             var backendError: NSError?
             var jsonResponse: JSON? = nil
@@ -98,26 +98,8 @@ class Backend {
             
             if data != nil {
                 jsonResponse = JSON(data: data!)
-                
-                if let status = jsonResponse!["status"].int {
-                    if status != 1 {
-                        if let errorMessageString = jsonResponse!["errorMessage"].string {
-                            backendError = NSError(domain: "Backend Error", code: status, userInfo: ["description": errorMessageString])
-                            success = false
-                            
-                        } else {
-                            backendError = NSError(domain: "Backend Error", code: status, userInfo: ["description": "No error message received from backend"])
-                            success = false
-                            
-                        }
-                    }
-                } else {
-                    backendError = NSError(domain: "Backend Error", code: 9, userInfo: ["description": "No status received from backend"])
-                    success = false
-                    
-                }
+                completionHandler(success: success, jsonResponse: jsonResponse, backendError: backendError)
             }
-            completionHandler(success: success, jsonResponse: jsonResponse, backendError: backendError)
             
             // debugging
             if jsonResponse != nil {
