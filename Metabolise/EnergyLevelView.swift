@@ -26,7 +26,6 @@ class EnergyLevelView: UIView {
         setup()
     }
     
-    
     var calories: Int! { // default value
         didSet {
             update()
@@ -38,8 +37,6 @@ class EnergyLevelView: UIView {
     let maximumCalorieOffset: Int! = 1500
     var levelView: UIView!
     var labelView: UILabel!
-    let positiveColor = UIColor.redColor()
-    let negativeColor = UIColor.blueColor()
     let labelViewFont = UIFont(name: "Helvetica-Neue", size: 18.0)
     let labelViewTextColor = UIColor.whiteColor()
     
@@ -57,6 +54,14 @@ class EnergyLevelView: UIView {
         
         addSubview(levelView)
         addSubview(labelView)
+    }
+    
+    func getPositiveColor(coef: CGFloat) -> UIColor {
+        return UIColor(red: (141+100*coef)/255, green: 196/255, blue: 15/255, alpha: 1)
+    }
+    
+    func getNegativeColor(coef: CGFloat) -> UIColor {
+        return UIColor(red: 22/255, green: (60 + 100 * coef)/255, blue: 133/255, alpha: 1)
     }
     
     func update() {
