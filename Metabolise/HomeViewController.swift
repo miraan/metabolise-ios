@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SpeechKit
 
-class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, SKTransactionDelegate {
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var hoursLabel: UILabel!
@@ -21,6 +22,8 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     @IBOutlet weak var mealLogButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+    var micSelected: Bool = false
+    
     var quantityPickerData: [[String]]!
     var unitsPickerData: [[String]]!
     
@@ -30,6 +33,13 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     var queryDisabled: Bool = false
     var queryTimer: NSTimer!
     var unitsSticky: Bool = false
+    
+    var skSession: SKSession!
+    var skTransaction: SKTransaction?
+    let recognitionType = SKTransactionSpeechTypeSearch
+    let language = "eng-USA"
+    
+    var endpointer: SKTransactionEndOfSpeechDetection = UInt(SKTransactionEndOfSpeechDetectionLong)
     
     var meal: State.Meal? {
         didSet {
@@ -98,6 +108,65 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         let tapper = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
         tapper.cancelsTouchesInView = true
         view.addGestureRecognizer(tapper)
+        
+        skSession = SKSession(URL: NSURL(string: SpeechRecognition.SKSServerUrl), appToken: SpeechRecognition.SKSAppKey)
+        if skSession == nil {
+            Helper.displayPopup("Error initialising speech recognition.", vc: self)
+        }
+    }
+    
+    func recognize() {
+        micSelected = true
+        skTransaction = skSession.recognizeWithType(recognitionType, detection: endpointer, language: language, delegate: self)
+    }
+    
+    func stopRecording() {
+        if skTransaction == nil {
+            print("stoprecording error: no sktransaction")
+            return
+        }
+        skTransaction!.stopRecording()
+        micSelected = false
+    }
+    
+    func cancel() {
+        if skTransaction == nil {
+            return
+        }
+        skTransaction!.cancel()
+    }
+    
+    func transactionDidBeginRecording(transaction: SKTransaction!) {
+        print("transactionDidBeginRecording")
+        mealTextField.text = ""
+        mealTextField.placeholder = "Listening..."
+    }
+    
+    func transactionDidFinishRecording(transaction: SKTransaction!) {
+        print("transactionDidFinishRecording")
+        mealTextField.text = ""
+        mealTextField.placeholder = "Processing..."
+    }
+    
+    func transaction(transaction: SKTransaction!, didReceiveRecognition recognition: SKRecognition!) {
+        print("received recognition: " + recognition.text)
+        mealTextField.text = recognition.text
+        mealTextField.becomeFirstResponder()
+        updateMeal()
+    }
+    
+    func transaction(transaction: SKTransaction!, didReceiveServiceResponse response: [NSObject : AnyObject]!) {
+        print("didReceiveServiceResponse: \(response)")
+    }
+    
+    func transaction(transaction: SKTransaction!, didFinishWithSuggestion suggestion: String!) {
+        print("didFinishWithSuggestion \(suggestion)")
+    }
+    
+    func transaction(transaction: SKTransaction!, didFailWithError error: NSError!, suggestion: String!) {
+        print("transaction didFailWithError: \(error)")
+        mealTextField.text = ""
+        mealTextField.placeholder = "Meal description"
     }
     
     func handleSingleTap(sender: UITapGestureRecognizer) {
@@ -288,7 +357,11 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     func isInDailyMode() -> Bool {
         return segmentedControl.selectedSegmentIndex == 0
     }
-
+    
+    @IBAction func didTapMicrophoneButton(sender: AnyObject) {
+        recognize()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
