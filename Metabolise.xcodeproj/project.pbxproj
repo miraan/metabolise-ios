@@ -18,6 +18,12 @@
 		530BDC841C5D290200EC3925 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC831C5D290200EC3925 /* SettingsTableViewController.swift */; };
 		530BDC861C5D58FE00EC3925 /* Backend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC851C5D58FE00EC3925 /* Backend.swift */; };
 		530BDC881C5D5A2300EC3925 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC871C5D5A2300EC3925 /* SwiftyJSON.swift */; };
+		530BDC8A1C5D8B0900EC3925 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC891C5D8B0900EC3925 /* UIView+Extensions.swift */; };
+		530BDC8C1C5DAC4A00EC3925 /* MealLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC8B1C5DAC4A00EC3925 /* MealLogTableViewController.swift */; };
+		530BDC9A1C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC931C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.m */; };
+		530BDC9B1C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC951C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.m */; };
+		530BDC9C1C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC971C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.m */; };
+		530BDC9D1C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 530BDC991C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +40,17 @@
 		530BDC831C5D290200EC3925 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		530BDC851C5D58FE00EC3925 /* Backend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Backend.swift; sourceTree = "<group>"; };
 		530BDC871C5D5A2300EC3925 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		530BDC891C5D8B0900EC3925 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		530BDC8B1C5DAC4A00EC3925 /* MealLogTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealLogTableViewController.swift; sourceTree = "<group>"; };
+		530BDC8D1C5DCD2F00EC3925 /* Metabolise-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Metabolise-Bridging-Header.h"; sourceTree = "<group>"; };
+		530BDC921C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
+		530BDC931C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
+		530BDC941C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		530BDC951C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		530BDC961C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		530BDC971C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
+		530BDC981C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		530BDC991C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,16 +87,35 @@
 				530BDC691C5CE6E500EC3925 /* AppDelegate.swift */,
 				530BDC6B1C5CE6E500EC3925 /* HomeViewController.swift */,
 				530BDC6D1C5CE6E500EC3925 /* Main.storyboard */,
+				530BDC8B1C5DAC4A00EC3925 /* MealLogTableViewController.swift */,
 				530BDC831C5D290200EC3925 /* SettingsTableViewController.swift */,
 				530BDC871C5D5A2300EC3925 /* SwiftyJSON.swift */,
 				530BDC7F1C5D057F00EC3925 /* Helper.swift */,
 				530BDC701C5CE6E500EC3925 /* Assets.xcassets */,
+				530BDC911C5DCD8200EC3925 /* TPKeyboardAvoiding */,
 				530BDC721C5CE6E500EC3925 /* LaunchScreen.storyboard */,
 				530BDC751C5CE6E500EC3925 /* Info.plist */,
 				530BDC811C5D1DDD00EC3925 /* State.swift */,
 				530BDC851C5D58FE00EC3925 /* Backend.swift */,
+				530BDC891C5D8B0900EC3925 /* UIView+Extensions.swift */,
+				530BDC8D1C5DCD2F00EC3925 /* Metabolise-Bridging-Header.h */,
 			);
 			path = Metabolise;
+			sourceTree = "<group>";
+		};
+		530BDC911C5DCD8200EC3925 /* TPKeyboardAvoiding */ = {
+			isa = PBXGroup;
+			children = (
+				530BDC921C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.h */,
+				530BDC931C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.m */,
+				530BDC941C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.h */,
+				530BDC951C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.m */,
+				530BDC961C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.h */,
+				530BDC971C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.m */,
+				530BDC981C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				530BDC991C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			path = TPKeyboardAvoiding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,10 +191,16 @@
 			files = (
 				530BDC6C1C5CE6E500EC3925 /* HomeViewController.swift in Sources */,
 				530BDC7E1C5CF78700EC3925 /* EnergyLevelView.swift in Sources */,
+				530BDC8C1C5DAC4A00EC3925 /* MealLogTableViewController.swift in Sources */,
+				530BDC9D1C5DCD8200EC3925 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				530BDC841C5D290200EC3925 /* SettingsTableViewController.swift in Sources */,
+				530BDC9A1C5DCD8200EC3925 /* TPKeyboardAvoidingCollectionView.m in Sources */,
+				530BDC9C1C5DCD8200EC3925 /* TPKeyboardAvoidingTableView.m in Sources */,
+				530BDC8A1C5D8B0900EC3925 /* UIView+Extensions.swift in Sources */,
 				530BDC881C5D5A2300EC3925 /* SwiftyJSON.swift in Sources */,
 				530BDC6A1C5CE6E500EC3925 /* AppDelegate.swift in Sources */,
 				530BDC821C5D1DDD00EC3925 /* State.swift in Sources */,
+				530BDC9B1C5DCD8200EC3925 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				530BDC861C5D58FE00EC3925 /* Backend.swift in Sources */,
 				530BDC801C5D057F00EC3925 /* Helper.swift in Sources */,
 			);
@@ -271,10 +313,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Metabolise/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.miraan.Metabolise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Metabolise/Metabolise-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -282,10 +327,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Metabolise/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.miraan.Metabolise;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Metabolise/Metabolise-Bridging-Header.h";
 			};
 			name = Release;
 		};

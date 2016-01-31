@@ -43,6 +43,8 @@ class EnergyLevelView: UIView {
     var originalHeight: CGFloat!
     var originalWidth: CGFloat!
     
+    var dividerLineView: UIImageView!
+    
     func setup() {
         originalHeight = self.frame.size.height
         originalWidth = self.frame.size.width
@@ -54,6 +56,10 @@ class EnergyLevelView: UIView {
         
         addSubview(levelView)
         addSubview(labelView)
+        
+        dividerLineView = UIImageView(frame: CGRectMake(0, (originalHeight / 2) - 0.5, originalWidth, 1))
+        dividerLineView.image = UIImage(named: "DividerLine")!
+        addSubview(dividerLineView)
     }
     
     func getPositiveColor(coef: CGFloat) -> UIColor {
@@ -65,16 +71,35 @@ class EnergyLevelView: UIView {
     }
     
     func update() {
-        UIView.animateWithDuration(1.0) {
+        let duration = 1.0
+        UIView.animateWithDuration(duration) {
             self.levelView.frame = self.getLevelViewFrame()
-            self.levelView.backgroundColor = (self.isPositive() ? self.positiveColor : self.negativeColor)
+            let coef = self.levelView.frame.size.height / self.originalHeight
+            self.levelView.backgroundColor = (self.isPositive() ? self.getPositiveColor(coef) : self.getNegativeColor(coef))
             
             self.labelView.frame = self.getLabelFrame()
-            self.labelView.text = (self.isPositive() ? "+" : "") + "\(self.calories)"
             self.labelView.font = self.labelViewFont
             self.labelView.textColor = self.labelViewTextColor
             self.labelView.textAlignment = NSTextAlignment.Center
         }
+        
+        func adjustLabel() {
+            var labelCalories = Int(self.labelView.text ?? "0")!
+            if labelCalories != self.calories {
+                let diff = abs(self.calories - labelCalories)
+                if labelCalories < self.calories {
+                    labelCalories += (diff+1) / 2
+                } else {
+                    labelCalories -= (diff+1) / 2
+                }
+                self.labelView.text = (labelCalories > 0 ? "+" : "") + "\(labelCalories)"
+                Helper.delay(0.1) {
+                    adjustLabel()
+                }
+            }
+        }
+        
+        adjustLabel()
     }
     
     func getLevelViewFrame() -> CGRect {
@@ -84,7 +109,9 @@ class EnergyLevelView: UIView {
         levelHeight += (maxLevelHeight - levelHeight) / 10
         
         let middleX: CGFloat = 0
-        let middleY: CGFloat = self.frame.size.height / 2
+        let middleY: CGFloat = originalHeight / 2
+        
+        levelHeight = min(levelHeight, maxLevelHeight)
         
         let levelX: CGFloat = middleX
         var levelY: CGFloat
@@ -93,7 +120,7 @@ class EnergyLevelView: UIView {
         } else {
             levelY = middleY - levelHeight
         }
-        levelHeight = min(levelHeight, maxLevelHeight)
+    
         return CGRectMake(levelX, levelY, levelWidth, levelHeight)
     }
     

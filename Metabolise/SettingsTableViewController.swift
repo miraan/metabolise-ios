@@ -48,7 +48,17 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDataSource
         startOfDayPickerView.selectRow(7, inComponent: 0, animated: false)
         startOfDayPickerView.selectRow(0, inComponent: 1, animated: false)
         
+        configureBackButton()
         populate()
+    }
+    
+    func configureBackButton() {
+        navigationItem.hidesBackButton = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "didTapBackButton")
+    }
+    
+    func didTapBackButton() {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func populate() {

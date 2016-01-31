@@ -8,17 +8,18 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var mealTextField: UITextField!
     @IBOutlet weak var voiceButton: UIButton!
-    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var energyLevelView: UIView!
     @IBOutlet weak var quantityPickerView: UIPickerView!
     @IBOutlet weak var unitsPickerView: UIPickerView!
     @IBOutlet weak var caloriesLabel: UILabel!
+    @IBOutlet weak var mealLogButton: UIButton!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     var quantityPickerData: [[String]]!
     var unitsPickerData: [[String]]!
@@ -32,12 +33,16 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     var meal: State.Meal? {
         didSet {
-            caloriesLabel.text = "\(meal!.calories * meal!.quantity) cal"
+            if meal != nil {
+                caloriesLabel.text = "\(meal!.calories * meal!.quantity) cal"
+            }
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        Helper.themeFont = caloriesLabel.font
+        
         firstAppear = true
         
         setup()
@@ -57,26 +62,62 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         quantityPickerData.append(quantities)
         
         unitsPickerData = []
-        unitsPickerData.append(["serving"])
+        unitsPickerData.append(["serving",
+            "slice",
+            "sandwich",
+            "plating",
+            "salad",
+            "cup",
+            "portion",
+            "piece",
+            "bowl",
+            "large",
+            "small",
+            "ml",
+            "regular",
+            "taco",
+            "wrap",
+            "cookie",
+            "burrito",
+            "pizza",
+            "muffin",
+            "bagel",
+            "burger",
+            "platter",
+            "tall cup",
+            "biscuit",
+            "roll",
+            "g",
+            "oz",
+            "fl oz"])
         
-        caloriesLabel.text = ""
+        mealTextField.placeholder = "Meal description"
+        mealTextField.delegate = self
+        caloriesLabel.text = "0 cal"
         
-        configureBackButton()
+        let tapper = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapper.cancelsTouchesInView = true
+        view.addGestureRecognizer(tapper)
     }
     
-    func configureBackButton() {
-        navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.Plain, target: self, action: "didTapBackButton")
+    func handleSingleTap(sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        didAddMeal()
+        return true
     }
     
     func update() {
         timeLabel.text = Helper.getTime()
-        let hoursLabelText = Helper.getTimeLeftInDayText()
+        let hoursLabelText = (isInDailyMode() ? Helper.getTimeLeftInDayText() : Helper.getTimeLeftInWeekText())
         if (hoursLabel.text != hoursLabelText) {
             hoursLabel.text = hoursLabelText
         }
         
-        let calories = Helper.getCalories()
+        let calories = (isInDailyMode() ? Helper.getDailyCalories() : Helper.getWeeklyCalories())
         if (energyLevel.calories != calories) {
             energyLevel.calories = calories
         }
@@ -96,6 +137,33 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             updateTimer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "update", userInfo: nil, repeats: true)
         }
         firstAppear = false
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        let keyboardSize = (notification.userInfo![UIKeyboardFrameBeginUserInfoKey]!.CGRectValue).size
+        UIView.animateWithDuration(0.3) {
+            var f = self.view.frame
+            f.origin.y = -keyboardSize.height
+            self.view.frame = f
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        UIView.animateWithDuration(0.3) {
+            var f = self.view.frame
+            f.origin.y = CGFloat(0)
+            self.view.frame = f
+        }
     }
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
@@ -154,15 +222,19 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
 
     func query() {
         let text = mealTextField.text!
+        if text == "" {
+            return
+        }
+        
         let units = unitsPickerData[0][unitsPickerView.selectedRowInComponent(0)]
         let query = "\(text) \(units)"
         let quantity = quantityPickerView.selectedRowInComponent(0) + 1
         
-        Backend.query(query) { (success, calories, units, queryError) -> Void in
+        Backend.query(query) { (success, calories, newUnits, queryError) -> Void in
             if success {
-                let meal = State.Meal(mealName: query, quantity: quantity, calories: calories, timeAdded: NSDate())
+                let meal = State.Meal(mealName: text, units: units, quantity: quantity, calories: calories, timeAdded: NSDate())
                 self.meal = meal
-                self.updateUnits(units!)
+                self.updateUnits(newUnits!)
                 
             } else {
                 print("query error: \(queryError)")
@@ -188,13 +260,33 @@ class HomeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
-    @IBAction func didTapAddButton(sender: AnyObject) {
+    func didAddMeal() {
         if let meal = self.meal {
             if let state = State.get() {
                 state.meals.append(meal)
                 state.save()
+                
+                Helper.toast("Meal Added")
+                
+                resetForm()
             }
         }
+    }
+    
+    func resetForm() {
+        mealTextField.text = ""
+        unitsPickerView.selectRow(0, inComponent: 0, animated: true)
+        quantityPickerView.selectRow(0, inComponent: 0, animated: true)
+        caloriesLabel.text = "0 cal"
+        meal = nil
+    }
+    
+    @IBAction func didChangeSegmentedControl(sender: AnyObject) {
+        update()
+    }
+    
+    func isInDailyMode() -> Bool {
+        return segmentedControl.selectedSegmentIndex == 0
     }
 
     override func didReceiveMemoryWarning() {

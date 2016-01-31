@@ -23,6 +23,8 @@ class State: NSObject, NSCoding {
     class Meal: NSObject, NSCoding {
         let mealNameKey = "mealName"
         var mealName: String!
+        let unitsKey = "units"
+        var units: String!
         let quantityKey = "quantity"
         var quantity: Int!
         let caloriesKey = "calories"
@@ -30,8 +32,9 @@ class State: NSObject, NSCoding {
         let timeAddedKey = "timeAdded"
         var timeAdded: NSDate!
         
-        init(mealName: String!, quantity: Int!, calories: Int!, timeAdded: NSDate) {
+        init(mealName: String!, units: String!, quantity: Int!, calories: Int!, timeAdded: NSDate) {
             self.mealName = mealName
+            self.units = units
             self.quantity = quantity
             self.calories = calories
             self.timeAdded = timeAdded
@@ -39,6 +42,7 @@ class State: NSObject, NSCoding {
         
         func encodeWithCoder(aCoder: NSCoder) {
             aCoder.encodeObject(mealName, forKey: mealNameKey)
+            aCoder.encodeObject(units, forKey: unitsKey)
             aCoder.encodeObject(quantity, forKey: quantityKey)
             aCoder.encodeObject(calories, forKey: caloriesKey)
             aCoder.encodeObject(timeAdded, forKey: timeAddedKey)
@@ -46,6 +50,7 @@ class State: NSObject, NSCoding {
         
         required init?(coder aDecoder: NSCoder) {
             mealName = aDecoder.decodeObjectForKey(mealNameKey) as! String
+            units = aDecoder.decodeObjectForKey(unitsKey) as! String
             quantity = aDecoder.decodeObjectForKey(quantityKey) as! Int
             calories = aDecoder.decodeObjectForKey(caloriesKey) as! Int
             timeAdded = aDecoder.decodeObjectForKey(timeAddedKey) as! NSDate

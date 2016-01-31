@@ -9,7 +9,7 @@
 import UIKit
 
 class Backend {
-    static var baseUrl = "http://localhost:5000/"
+    static var baseUrl = "http://192.168.43.173:3000/"
     
     class func query(text: String, completionHandler: (success: Bool, calories: Int?, units: String?, queryError: NSError?) -> Void) {
         call("", params: ["dish": text]) { (success: Bool, jsonResponse: JSON?, backendError: NSError?) in
